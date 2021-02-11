@@ -1,5 +1,7 @@
-class Bubble
-  def self.sort(arr)
+module Bubble
+  extend self
+
+  def sort(arr)
     loop do
       swapped = false
 
