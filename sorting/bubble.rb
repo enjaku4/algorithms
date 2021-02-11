@@ -1,18 +1,16 @@
 class Bubble
   def self.sort(arr)
-    sorting = true
+    loop do
+      swapped = false
 
-    while sorting
-      sorting = false
-
-      arr[0..-2].each_with_index do |val, index|
-        if val > arr[index + 1]
-          arr[index], arr[index + 1] = arr[index + 1], val
-          sorting = true
+      for index in 0..(arr.length - 2) do
+        if arr[index] > arr[index + 1]
+          arr[index], arr[index+1] = arr[index+1], arr[index]
+          swapped = true
         end
       end
-    end
 
-    arr
+      return arr unless swapped
+    end
   end
 end
