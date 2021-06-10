@@ -1,5 +1,2 @@
 .DS_Store
-.byebug_history
-.tags
-.tags_swap
-.ctags
+*.pyc
