@@ -1,10 +1,11 @@
 import unittest
 import random
 import bubble
+import merge
 
 class Test(unittest.TestCase):
   def setUp(self):
-    self.algorithms = [bubble]
+    self.algorithms = [bubble, merge]
 
   def test_sorting(self):
     for _ in range(10):
