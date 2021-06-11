@@ -2,10 +2,11 @@ import unittest
 import random
 import bubble
 import merge
+import quick
 
 class Test(unittest.TestCase):
   def setUp(self):
-    self.algorithms = [bubble, merge]
+    self.algorithms = [bubble, merge, quick]
 
   def test_sorting(self):
     for _ in range(10):
@@ -16,4 +17,4 @@ class Test(unittest.TestCase):
 
   def test_sorting_empty_array_does_nothing(self):
     for algorithm in self.algorithms:
-      self.assertEqual(len(algorithm.sort([])), 0)
+      self.assertEqual(algorithm.sort([]), [])
