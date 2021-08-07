@@ -1,5 +1,4 @@
 require 'rspec'
-require 'byebug'
 require_relative 'math_parser'
 
 describe MathParser do
@@ -16,6 +15,6 @@ describe MathParser do
     it { expect(described_class.calculate('-7/2-5*2+4')).to eq(-9.5) }
     it { expect(described_class.calculate('13-4*2+(4-9/3)-1')).to eq(5.0) }
     it { expect(described_class.calculate('1+(44-28)/(2+7*(5-3))-2')).to eq(0.0) }
-    it { expect(described_class.calculate('36-4+(-4.0/2+1)*(1+7*(-1-3))-23')).to eq(36.0) }
+    it { expect(described_class.calculate('36.01-4+(-4.0/2+1)*(1+7.455*(-1-3))-23')).to eq(37.83) }
   end
 end

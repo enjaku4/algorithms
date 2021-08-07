@@ -9,7 +9,7 @@ module MathParser
   private
 
     def parse(str)
-      "(#{str})".gsub('(-', '(0-').scan(Regexp.new('\d*\.?\d|\*|/|\+|-|\(|\)')).map do |char|
+      "(#{str})".gsub('(-', '(0-').scan(Regexp.new('\*|/|\+|-|\(|\)|\d+\.?\d*')).map do |char|
         char[Regexp.new('\d')] ? char.to_f : char.to_sym
       end
     end
