@@ -30,24 +30,16 @@ class MathTree:
     node = MathNode(operation)
     node.right = MathNode(value)
 
-    if operation in ['*', '/']:
-      self.__append_right(node, self.root)
-    elif operation in ['+', '-']:
+    if self.root.value in ['+', '-'] and operation in ['*', '/']:
+      self.__append_right(node)
+    else:
       self.__swap_root(node)
 
   def calculate(self):
     return self.__evaluate(self.root)
 
-  def __append_right(self, node, current_node):
-    # if current_node.right is None:
-    #   self.__swap_root(node)
-    #   return
-
-    if current_node.right.is_leaf:
-      node.left, current_node.right = current_node.right, node
-      return
-
-    self.__append_right(node, current_node.right)
+  def __append_right(self, node):
+    node.left, self.root.right = self.root.right, node
 
   def __swap_root(self, node):
     node.left, self.root = self.root, node
