@@ -1,7 +1,7 @@
 import unittest
 from binary_tree import *
 
-class Test(unittest.TestCase):
+class TestBinaryTree(unittest.TestCase):
   def setUp(self):
     self.tree = BinaryTree(1)
     self.tree.root.left = Node(2)
