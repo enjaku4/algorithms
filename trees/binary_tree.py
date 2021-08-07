@@ -12,13 +12,13 @@ class BinaryTree:
     return self.__search(self.root, value)
 
   def preorder_print(self):
-    return self.__preorder_print(self.root)
+    return self.__preorder_print(self.root, [])
 
   def inorder_print(self):
-    return self.__inorder_print(self.root)
+    return self.__inorder_print(self.root, [])
 
   def postorder_print(self):
-    return self.__postorder_print(self.root)
+    return self.__postorder_print(self.root, [])
 
   def __search(self, start_node, value):
     if start_node:
@@ -29,21 +29,21 @@ class BinaryTree:
       )
     return False
 
-  def __preorder_print(self, start_node, traversal = []):
+  def __preorder_print(self, start_node, traversal):
     if start_node:
       traversal.append(start_node.value)
       self.__preorder_print(start_node.left, traversal)
       self.__preorder_print(start_node.right, traversal)
     return traversal
 
-  def __inorder_print(self, start_node, traversal = []):
+  def __inorder_print(self, start_node, traversal):
     if start_node:
       self.__inorder_print(start_node.left, traversal)
       traversal.append(start_node.value)
       self.__inorder_print(start_node.right, traversal)
     return traversal
 
-  def __postorder_print(self, start_node, traversal = []):
+  def __postorder_print(self, start_node, traversal):
     if start_node:
       self.__postorder_print(start_node.left, traversal)
       self.__postorder_print(start_node.right, traversal)
