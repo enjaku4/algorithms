@@ -10,7 +10,7 @@ class MathParser:
     return tree.calculate()
 
   def __build_tree(self):
-    tree = MathTree(float(self.__operations_array()[1]))
+    tree = Tree(float(self.__operations_array()[1]))
 
     for operation, value in zip(self.__operations_array()[0::2], self.__operations_array()[1::2])[1:]:
       tree.add(operation, float(value))
@@ -20,15 +20,15 @@ class MathParser:
   def __operations_array(self):
     return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', re.sub(r'\(-', '(0-', '(' + self.string + ')'))
 
-class MathTree:
+class Tree:
   OPERATIONS = { '+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.div }
 
   def __init__(self, root_value):
-    self.root = MathNode(root_value)
+    self.root = Node(root_value)
 
   def add(self, operation, value):
-    node = MathNode(operation)
-    node.right = MathNode(value)
+    node = Node(operation)
+    node.right = Node(value)
 
     if self.root.value in ['+', '-'] and operation in ['*', '/']:
       self.__append_right(node)
@@ -53,7 +53,7 @@ class MathTree:
       self.__evaluate(current_node.right)
     )
 
-class MathNode:
+class Node:
   def __init__(self, value):
     self.value = value
     self.left = None
