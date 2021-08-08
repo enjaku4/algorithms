@@ -33,7 +33,8 @@ class MathParser:
       index += 1
 
   def __operations_array(self):
-    string = re.sub(r'\(-', '(0-', '(' + self.string + ')')
+    string = '(' + self.string + ')'
+    string = re.sub(r'\(-', '(0-', string)
     string = re.sub(r'\(\(', '(0+(', string)
     return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', string)
 
