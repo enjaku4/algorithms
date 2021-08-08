@@ -6,31 +6,29 @@ class MathParser:
     self.string = string
 
   def calculate(self):
-    tree = self.__build_tree(0)
+    tree = self.__build_tree(Tree(), 0)
     return tree.calculate()
 
-  def __build_tree(self, index):
-    tree = Tree()
+  def __build_tree(self, tree, index):
+    if index >= len(self.__operations_array()):
+      return tree
 
-    while index < len(self.__operations_array()):
-      value = self.__operations_array()[index]
+    value = self.__operations_array()[index]
 
-      if value == '(':
-        sub_tree, index = self.__build_tree(index + 1)
-        tree.append(sub_tree.root)
-      elif value == ')':
-        return (tree, index)
-      elif value in Tree.OPERATIONS.keys():
-        if tree.root.value in ['+', '-'] and value in ['*', '/']:
-          tree.swap_right(Node(value))
-        else:
-          tree.swap_root(Node(value))
+    if value == '(':
+      sub_tree, index = self.__build_tree(Tree(), index + 1)
+      tree.append(sub_tree.root)
+    elif value == ')':
+      return (tree, index)
+    elif value in Tree.OPERATIONS.keys():
+      if tree.root.value in ['+', '-'] and value in ['*', '/']:
+        tree.swap_right(Node(value))
       else:
-        tree.append(Node(float(value)))
+        tree.swap_root(Node(value))
+    else:
+      tree.append(Node(float(value)))
 
-      index += 1
-
-    return tree
+    return self.__build_tree(tree, index + 1)
 
   def __operations_array(self):
     return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', re.sub(r'^-|(?<=\()-', '0-', self.string))
