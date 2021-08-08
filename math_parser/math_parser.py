@@ -10,23 +10,20 @@ class MathParser:
     return tree.calculate()
 
   def __build_tree(self, tree, index):
-    if index >= len(self.__operations_array()):
+    if index == len(self.__operations_array()):
       return tree
 
-    value = self.__operations_array()[index]
+    elem = self.__operations_array()[index]
 
-    if value == '(':
+    if elem == '(':
       sub_tree, index = self.__build_tree(Tree(), index + 1)
-      tree.append(sub_tree.root)
-    elif value == ')':
+      tree.append_value(sub_tree.root)
+    elif elem == ')':
       return (tree, index)
-    elif value in Tree.OPERATIONS.keys():
-      if tree.root.value in ['+', '-'] and value in ['*', '/']:
-        tree.swap_right(Node(value))
-      else:
-        tree.swap_root(Node(value))
+    elif elem in Tree.OPERATIONS.keys():
+      tree.append_operation(Node(elem))
     else:
-      tree.append(Node(float(value)))
+      tree.append_value(Node(float(elem)))
 
     return self.__build_tree(tree, index + 1)
 
@@ -43,13 +40,13 @@ class Tree:
   def calculate(self):
     return self.__evaluate(self.root)
 
-  def swap_root(self, node):
-    node.left, self.root = self.root, node
+  def append_operation(self, node):
+    if self.root.value in ['+', '-'] and node.value in ['*', '/']:
+      node.left, self.root.right = self.root.right, node
+    else:
+      node.left, self.root = self.root, node
 
-  def swap_right(self, node):
-    node.left, self.root.right = self.root.right, node
-
-  def append(self, node):
+  def append_value(self, node):
     current_node = self.root
 
     while current_node.right:
