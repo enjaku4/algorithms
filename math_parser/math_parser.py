@@ -6,13 +6,11 @@ class MathParser:
     self.string = string
 
   def calculate(self):
-    tree, _ = self.__build_tree(1)
+    tree = self.__build_tree(0)
     return tree.calculate()
 
-  def __build_tree(self, start_index):
-    tree = Tree(float(self.__operations_array()[start_index]))
-
-    index = start_index + 1
+  def __build_tree(self, index):
+    tree = Tree()
 
     while index < len(self.__operations_array()):
       value = self.__operations_array()[index]
@@ -32,17 +30,17 @@ class MathParser:
 
       index += 1
 
+    return tree
+
   def __operations_array(self):
-    string = '(' + self.string + ')'
-    string = re.sub(r'\(-', '(0-', string)
-    string = re.sub(r'\(\(', '(0+(', string)
-    return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', string)
+    return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', re.sub(r'^-|(?<=\()-', '0-', self.string))
 
 class Tree:
   OPERATIONS = { '+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.div }
 
-  def __init__(self, root_value):
-    self.root = Node(root_value)
+  def __init__(self):
+    self.root = Node('+')
+    self.root.left = Node(0)
 
   def calculate(self):
     return self.__evaluate(self.root)
