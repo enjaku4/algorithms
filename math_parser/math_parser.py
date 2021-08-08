@@ -6,7 +6,6 @@ class MathParser:
     self.string = string
 
   def calculate(self):
-    # TODO remove global parens and start with 0, yet swap (- and ^- for 0-
     tree, _ = self.__build_tree(1)
     return tree.calculate()
 
@@ -19,8 +18,8 @@ class MathParser:
       value = self.__operations_array()[index]
 
       if value == '(':
-        parens_tree, index = self.__build_tree(index + 1)
-        tree.append_right(parens_tree.root)
+        sub_tree, index = self.__build_tree(index + 1)
+        tree.append(sub_tree.root)
       elif value == ')':
         return (tree, index)
       elif value in Tree.OPERATIONS.keys():
@@ -29,12 +28,14 @@ class MathParser:
         else:
           tree.swap_root(Node(value))
       else:
-        tree.append_right(Node(float(value)))
+        tree.append(Node(float(value)))
 
       index += 1
 
   def __operations_array(self):
-    return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', re.sub(r'\(-', '(0-', '(' + self.string + ')'))
+    string = re.sub(r'\(-', '(0-', '(' + self.string + ')')
+    string = re.sub(r'\(\(', '(0+(', string)
+    return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', string)
 
 class Tree:
   OPERATIONS = { '+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.div }
@@ -51,7 +52,7 @@ class Tree:
   def swap_right(self, node):
     node.left, self.root.right = self.root.right, node
 
-  def append_right(self, node):
+  def append(self, node):
     current_node = self.root
 
     while current_node.right:
