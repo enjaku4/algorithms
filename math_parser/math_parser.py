@@ -6,16 +6,32 @@ class MathParser:
     self.string = string
 
   def calculate(self):
-    tree = self.__build_tree()
+    # TODO remove global parens and start with 0, yet swap (- and ^- for 0-
+    tree, _ = self.__build_tree(1)
     return tree.calculate()
 
-  def __build_tree(self):
-    tree = Tree(float(self.__operations_array()[1]))
+  def __build_tree(self, start_index):
+    tree = Tree(float(self.__operations_array()[start_index]))
 
-    for operation, value in zip(self.__operations_array()[0::2], self.__operations_array()[1::2])[1:]:
-      tree.add(operation, float(value))
+    index = start_index + 1
 
-    return tree
+    while index < len(self.__operations_array()):
+      value = self.__operations_array()[index]
+
+      if value == '(':
+        parens_tree, index = self.__build_tree(index + 1)
+        tree.append_right(parens_tree.root)
+      elif value == ')':
+        return (tree, index)
+      elif value in Tree.OPERATIONS.keys():
+        if tree.root.value in ['+', '-'] and value in ['*', '/']:
+          tree.swap_right(Node(value))
+        else:
+          tree.swap_root(Node(value))
+      else:
+        tree.append_right(Node(float(value)))
+
+      index += 1
 
   def __operations_array(self):
     return re.findall(r'\d+\.?\d*|\+|-|\*|/|\(|\)', re.sub(r'\(-', '(0-', '(' + self.string + ')'))
@@ -26,23 +42,22 @@ class Tree:
   def __init__(self, root_value):
     self.root = Node(root_value)
 
-  def add(self, operation, value):
-    node = Node(operation)
-    node.right = Node(value)
-
-    if self.root.value in ['+', '-'] and operation in ['*', '/']:
-      self.__append_right(node)
-    else:
-      self.__swap_root(node)
-
   def calculate(self):
     return self.__evaluate(self.root)
 
-  def __append_right(self, node):
+  def swap_root(self, node):
+    node.left, self.root = self.root, node
+
+  def swap_right(self, node):
     node.left, self.root.right = self.root.right, node
 
-  def __swap_root(self, node):
-    node.left, self.root = self.root, node
+  def append_right(self, node):
+    current_node = self.root
+
+    while current_node.right:
+      current_node = current_node.right
+
+    current_node.right = node
 
   def __evaluate(self, current_node):
     if current_node.is_leaf():
