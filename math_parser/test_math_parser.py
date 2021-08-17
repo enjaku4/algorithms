@@ -18,3 +18,4 @@ class TestMathPasrser(unittest.TestCase):
     self.assertEqual(MathParser('1+(44-28)/((5-3)*7+2)-2').calculate(), 0.0)
     self.assertEqual(MathParser('36.01-4+(-4.0/2+1)*(1+7.455*(-1-3))-23').calculate(), 37.83)
     self.assertEqual(MathParser('(4+3)*4-2.5/5').calculate(), 27.5)
+    self.assertEqual(MathParser('-(4+3)*4-2.5/5').calculate(), -28.5)
