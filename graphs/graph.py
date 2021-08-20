@@ -70,3 +70,39 @@ class Graph:
       result.append(row)
 
     return result
+
+  def dfs(self, start_node_value):
+    start_node = self.__find_node(start_node_value)
+    return map(lambda node: node.value, self.__dfs(start_node, []))
+
+  def bfs(self, start_node_value):
+    start_node = self.__find_node(start_node_value)
+    return map(lambda node: node.value, self.__bfs(start_node))
+
+  def __dfs(self, node, visited):
+    visited.append(node)
+
+    for edge in filter(lambda edge: edge.node_from == node, node.edges):
+      if edge.node_to not in visited:
+        self.__dfs(edge.node_to, visited)
+
+    return visited
+
+  def __bfs(self, node):
+    queue, visited = [node], []
+
+    while(len(queue) > 0):
+      visited.append(queue.pop(0))
+
+      node = visited[-1]
+
+      for edge in filter(lambda edge: edge.node_from == node, node.edges):
+        if edge.node_to not in queue and edge.node_to not in visited:
+          queue.append(edge.node_to)
+
+    return visited
+
+  def __find_node(self, value):
+    for node in self.nodes:
+      if node.value == value:
+        return node

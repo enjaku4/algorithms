@@ -1,7 +1,7 @@
 import unittest
-from graph import *
+from graph import Graph
 
-class TestGraph(unittest.TestCase):
+class TestGraphRepresentation(unittest.TestCase):
   def setUp(self):
     self.graph = Graph()
     self.graph.insert_node(0)
@@ -27,3 +27,30 @@ class TestGraph(unittest.TestCase):
        [0, 0,   0,   0, 103],
        [0, 0,   0,   0,   0]]
     )
+
+class TestGraphTraversal(unittest.TestCase):
+  def setUp(self):
+    self.graph = Graph()
+    self.graph.insert_node(6)
+    self.graph.insert_edge(51, 0, 1)
+    self.graph.insert_edge(51, 1, 0)
+    self.graph.insert_edge(9950, 0, 3)
+    self.graph.insert_edge(9950, 3, 0)
+    self.graph.insert_edge(10375, 0, 5)
+    self.graph.insert_edge(10375, 5, 0)
+    self.graph.insert_edge(9900, 1, 3)
+    self.graph.insert_edge(9900, 3, 1)
+    self.graph.insert_edge(9130, 1, 4)
+    self.graph.insert_edge(9130, 4, 1)
+    self.graph.insert_edge(9217, 2, 3)
+    self.graph.insert_edge(9217, 3, 2)
+    self.graph.insert_edge(932, 2, 4)
+    self.graph.insert_edge(932, 4, 2)
+    self.graph.insert_edge(9471, 2, 5)
+    self.graph.insert_edge(9471, 5, 2)
+
+  def test_dfs(self):
+    self.assertEqual(self.graph.dfs(2), [2, 3, 0, 1, 4, 5])
+
+  def test_bfs(self):
+    self.assertEqual(self.graph.bfs(2), [2, 3, 4, 5, 0, 1])
